@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Câmara notícias - Câmara dos Deputados</title>
+    <item>
+      <title><![CDATA[Câmara debate proteção das bibliotecas públicas]]></title>
+      <link>https://www.camara.leg.br/noticias/1306355-camara-debate-protecao-das-bibliotecas-publicas?utm_source=rss</link>
+      <pubDate>Mon, 28 Sep 2026 21:04:00 GMT</pubDate>
+      <content:encoded><![CDATA[<div class="image-container"><img src="https://example.org/image.jpg"></div><p>A comissão discutiu uma proposta para as bibliotecas.</p><script>Texto que não pertence à matéria.</script><ul><li>O texto seguirá para votação.</li></ul>]]></content:encoded>
+    </item>
+    <item>
+      <title>Outra matéria da Câmara</title>
+      <link>https://www.camara.leg.br/noticias/1306356-outra-materia-da-camara</link>
+      <pubDate>Mon, 28 Sep 2026 20:50:00 GMT</pubDate>
+      <content:encoded><![CDATA[<p>O colegiado apresentou seu relatório nesta segunda-feira.</p>]]></content:encoded>
+    </item>
+    <item>
+      <title>URL fora do domínio oficial</title>
+      <link>https://example.org/noticias/1306357-url-externa</link>
+      <pubDate>Mon, 28 Sep 2026 20:30:00 GMT</pubDate>
+      <content:encoded><![CDATA[<p>Esta entrada deve ser ignorada.</p>]]></content:encoded>
+    </item>
+  </channel>
+</rss>

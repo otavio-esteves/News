@@ -1,0 +1,179 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-border: var(--border);
+    --color-ring: var(--ring);
+    --color-subtle: var(--subtle);
+    --color-accent: var(--accent);
+    --color-faint: var(--faint);
+}
+
+:root {
+    color-scheme: dark;
+    --background: #0b0c0e;
+    --card: #17191c;
+    --card-foreground: #f4f4f5;
+    --foreground: #f4f4f5;
+    --primary: #f4f4f5;
+    --primary-foreground: #18181b;
+    --muted: #25272b;
+    --muted-foreground: #a8a9b0;
+    --border: #3b3d42;
+    --ring: #f4f4f5;
+    --subtle: #1a1c1f;
+    --accent: #d4d4d8;
+    --faint: #777980;
+}
+
+:root[data-theme='light'] {
+    color-scheme: light;
+    --background: #eef0f2;
+    --card: #fff;
+    --card-foreground: #18181b;
+    --foreground: #18181b;
+    --primary: #18181b;
+    --primary-foreground: #fafafa;
+    --muted: #f0f1f3;
+    --muted-foreground: #62646b;
+    --border: #d6d8dd;
+    --ring: #18181b;
+    --subtle: #f3f4f6;
+    --accent: #3f3f46;
+    --faint: #898b92;
+}
+
+body {
+    background: var(--background);
+    color: var(--foreground);
+}
+
+button {
+    cursor: pointer;
+}
+
+.theme-icon-sun {
+    display: none;
+}
+
+:root[data-theme='light'] .theme-icon-sun {
+    display: block;
+}
+
+:root[data-theme='light'] .theme-icon-moon {
+    display: none;
+}
+
+.site-menu-dialog {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(24rem, 100vw);
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-right: 1px solid var(--border);
+    box-shadow: 1rem 0 3rem rgb(0 0 0 / 0.25);
+}
+
+.site-menu-dialog[open] {
+    animation: menu-enter 180ms ease-out;
+}
+
+.site-menu-dialog::backdrop {
+    background: rgb(0 0 0 / 0.65);
+}
+
+@keyframes menu-enter {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+}
+
+.menu-link {
+    display: flex;
+    min-height: 2.5rem;
+    align-items: center;
+    border-radius: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: background-color 150ms ease, color 150ms ease;
+}
+
+.menu-link:hover,
+.menu-link:focus-visible {
+    background: var(--muted);
+    color: var(--foreground);
+}
+
+.menu-link:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+}
+
+.menu-link[aria-current='page'] {
+    background: var(--primary);
+    color: var(--primary-foreground);
+}
+
+.skip-link {
+    position: absolute;
+    z-index: 20;
+    top: -5rem;
+    left: 1rem;
+    padding: 0.65rem 1rem;
+    background: var(--foreground);
+    color: var(--background);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.skip-link:focus {
+    top: 1rem;
+}
+
+.story-title-link:focus-visible,
+.brand-mark:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 4px;
+}
+
+.story-title-link:hover {
+    color: var(--muted-foreground);
+}
+
+.story-title-link {
+    transition: color 150ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .site-menu-dialog[open] {
+        animation: none;
+    }
+}

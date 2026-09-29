@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Agência Brasil</title>
+    <item>
+      <title>Bibliotecas ampliam horário de atendimento</title>
+      <link>https://agenciabrasil.ebc.com.br/educacao/noticia/2026-09/bibliotecas-ampliam-horario?utm_source=rss</link>
+      <description><![CDATA[<p>As bibliotecas abrirão por mais tempo.</p><p>O novo horário começa na próxima semana.</p>]]></description>
+      <pubDate>Sun, 27 Sep 2026 16:30:00 -0300</pubDate>
+      <dc:creator>Repórter da Agência Brasil</dc:creator>
+    </item>
+    <item>
+      <title>Conteúdo de parceiro</title>
+      <link>https://agenciabrasil.ebc.com.br/geral/noticia/2026-09/conteudo-de-parceiro</link>
+      <description><![CDATA[<p>Texto de outro veículo.</p>]]></description>
+      <pubDate>Sun, 27 Sep 2026 16:20:00 -0300</pubDate>
+      <dc:creator>Agência Parceira</dc:creator>
+    </item>
+    <item>
+      <title>Bibliotecas ampliam horário</title>
+      <link>https://agenciabrasil.ebc.com.br/educacao/noticia/2026-09/novo-horario-das-bibliotecas</link>
+      <description><![CDATA[<p>As bibliotecas abrirão por mais tempo.</p><p>O novo horário começa na próxima semana.</p>]]></description>
+      <pubDate>Sun, 27 Sep 2026 16:35:00 -0300</pubDate>
+      <dc:creator>Agência Brasil</dc:creator>
+    </item>
+    <item>
+      <title>URL externa</title>
+      <link>https://outro-exemplo.org/noticia/2026-09/url-externa</link>
+      <description><![CDATA[<p>Conteúdo fora do domínio esperado.</p>]]></description>
+      <pubDate>Sun, 27 Sep 2026 16:10:00 -0300</pubDate>
+      <dc:creator>Agência Brasil</dc:creator>
+    </item>
+  </channel>
+</rss>

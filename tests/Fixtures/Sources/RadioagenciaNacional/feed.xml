@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Radioagência Nacional</title>
+    <item>
+      <title>Pesquisa amplia atendimento em saúde</title>
+      <link>https://agenciabrasil.ebc.com.br/radioagencia-nacional/saude/audio/2026-09/pesquisa-amplia-atendimento-em-saude?utm_source=rss</link>
+      <description><![CDATA[<p>A pesquisa ampliou o atendimento. <img src="https://example.com/tracker.png"></p><script>alert('x')</script><p>Os resultados serão publicados amanhã.</p><span class="hms">2:15</span>]]></description>
+      <pubDate>Mon, 28 Sep 2026 16:30:00 -0300</pubDate>
+      <dc:creator>Ana Silva - Repórter da Rádio Nacional</dc:creator>
+    </item>
+    <item>
+      <title>Conteúdo de parceiro</title>
+      <link>https://agenciabrasil.ebc.com.br/radioagencia-nacional/saude/audio/2026-09/conteudo-de-parceiro</link>
+      <description><![CDATA[<p>Texto de outra agência.</p>]]></description>
+      <pubDate>Mon, 28 Sep 2026 16:31:00 -0300</pubDate>
+      <dc:creator>Agência Reuters</dc:creator>
+    </item>
+    <item>
+      <title>URL fora da Radioagência</title>
+      <link>https://agenciabrasil.ebc.com.br/geral/noticia/2026-09/noticia-externa</link>
+      <description><![CDATA[<p>Texto fora do canal.</p>]]></description>
+      <pubDate>Mon, 28 Sep 2026 16:32:00 -0300</pubDate>
+      <dc:creator>Repórter da Rádio Nacional</dc:creator>
+    </item>
+  </channel>
+</rss>

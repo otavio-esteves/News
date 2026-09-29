@@ -1,0 +1,26 @@
+[
+  {
+    "id": 428821,
+    "date_gmt": "2026-09-28T18:59:04",
+    "link": "https://www.cnj.jus.br/conciliar-e-legal-premiacao-sera-entregue-pelo-cnj/?utm_source=feed",
+    "title": { "rendered": "Premiação &amp; conciliação no CNJ" },
+    "content": { "rendered": "<p>O CNJ anunciou a premiação. <img src=\"https://example.com/tracker\"></p><script>alert('x')</script><p>A cerimônia será realizada nesta semana.</p>" },
+    "categories": [1415, 1419]
+  },
+  {
+    "id": 428822,
+    "date_gmt": "2026-09-28T19:00:00",
+    "link": "https://www.cnj.jus.br/noticia-de-outro-tribunal/",
+    "title": { "rendered": "Notícia de outro tribunal" },
+    "content": { "rendered": "<p>Texto de parceiro.</p>" },
+    "categories": [1416, 1419]
+  },
+  {
+    "id": 428823,
+    "date_gmt": "2026-09-28T19:01:00",
+    "link": "https://example.com/noticia-externa/",
+    "title": { "rendered": "Notícia em domínio externo" },
+    "content": { "rendered": "<p>Texto externo.</p>" },
+    "categories": [1415]
+  }
+]

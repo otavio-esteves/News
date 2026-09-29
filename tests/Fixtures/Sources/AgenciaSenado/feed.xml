@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Senado Notícias</title>
+    <item>
+      <title>Senado debate ampliação de bibliotecas</title>
+      <description />
+      <pubDate>Sun, 27 Sep 2026 16:45:00 -0300</pubDate>
+      <guid>https://www12.senado.leg.br/noticias/materias/2026/09/27/senado-debate-ampliacao-de-bibliotecas</guid>
+    </item>
+    <item>
+      <title>Senado debate ampliação de escolas</title>
+      <description />
+      <pubDate>Sun, 27 Sep 2026 16:35:00 -0300</pubDate>
+      <guid>https://www12.senado.leg.br/noticias/materias/2026/09/27/senado-debate-ampliacao-de-escolas</guid>
+    </item>
+    <item>
+      <title>Vídeo sem texto</title>
+      <pubDate>Sun, 27 Sep 2026 16:30:00 -0300</pubDate>
+      <guid>https://www12.senado.leg.br/noticias/videos/2026/09/video-sem-texto</guid>
+    </item>
+  </channel>
+</rss>

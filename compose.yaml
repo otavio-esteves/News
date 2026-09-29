@@ -1,0 +1,72 @@
+x-php: &php
+  image: news-php:dev
+  working_dir: /app
+  user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
+  volumes:
+    - .:/app
+  env_file:
+    - .env
+  environment:
+    COMPOSER_HOME: /tmp/composer
+  depends_on:
+    postgres:
+      condition: service_healthy
+
+services:
+  app:
+    <<: *php
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    ports:
+      - "${APP_PORT:-8000}:80"
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1/up') === false ? 1 : 0);"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  queue:
+    <<: *php
+    command: php artisan queue:work --sleep=1 --tries=3 --timeout=60 --max-time=3600
+    stop_grace_period: 75s
+    restart: unless-stopped
+    healthcheck:
+      disable: true
+
+  scheduler:
+    <<: *php
+    command: php artisan schedule:work
+    restart: unless-stopped
+    healthcheck:
+      disable: true
+
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: news
+      POSTGRES_USER: news
+      POSTGRES_PASSWORD: news
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U news -d news"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  node:
+    image: node:24-alpine
+    working_dir: /app
+    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    ports:
+      - "${VITE_PORT:-5174}:${VITE_PORT:-5174}"
+    command: npm run dev -- --host 0.0.0.0
+
+volumes:
+  pgdata:
