@@ -32,6 +32,7 @@ make artisan cmd="schedule:list"
 make artisan cmd="queue:failed"
 make artisan cmd="queue:restart"
 make artisan cmd="news:remove-preview"
+make artisan cmd="news:write-draft 123"
 make composer cmd="install"
 make npm cmd="run build"
 ```
@@ -69,5 +70,7 @@ A sexta fonte é a Agência de Notícias do IBGE, pelo [RSS oficial](https://age
 A ingestão normaliza URLs HTTPS, remove parâmetros de rastreamento e usa o caminho da notícia como identidade no adapter da Agência Brasil. A URL canônica tem índice único. O hash do texto normalizado detecta cópias dentro da mesma fonte; fontes diferentes mantêm artigos próprios para preservar a atribuição. Ao encontrar uma URL ou conteúdo já registrado, a coleta mantém o primeiro registro. Alterações editoriais de uma matéria existente exigirão um fluxo próprio de atualização em marco posterior.
 
 `make test` usa SQLite em memória e não altera o PostgreSQL de desenvolvimento.
+
+O primeiro recorte do M8 permite gerar manualmente uma síntese para uma Story em rascunho que ainda não tenha síntese. Configure `OPENAI_API_KEY` no `.env` e, se necessário, `NEWS_AI_STORY_WRITER_MODEL`; passe o ID da Story para `news:write-draft`. O comando aceita de um a dez Articles de fontes reais habilitadas, valida título, categoria, parágrafos e referências, registra a tentativa em `ai_runs` e salva a saída em `story_drafts`. A síntese não aparece no site público. As falhas de validação não criam rascunhos, e um rascunho existente não é sobrescrito.
 
 A revisão editorial e a publicação das Stories entram nos marcos seguintes.

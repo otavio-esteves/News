@@ -8,6 +8,9 @@ use App\News\Sources\AgenciaSenadoAdapter;
 use App\News\Sources\RadioagenciaNacionalAdapter;
 
 return [
+    'ai' => [
+        'story_writer_model' => env('NEWS_AI_STORY_WRITER_MODEL', 'gpt-4o-mini'),
+    ],
     'source_adapters' => [
         'agencia-brasil' => AgenciaBrasilAdapter::class,
         'agencia-camara' => AgenciaCamaraAdapter::class,
