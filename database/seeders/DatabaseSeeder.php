@@ -20,5 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(FolhaSourceSeeder::class);
         $this->call(G1SourceSeeder::class);
         $this->call(MeioSourceSeeder::class);
+        $this->call(EstadaoSourceSeeder::class);
+        $this->call(CartaCapitalSourceSeeder::class);
     }
 }

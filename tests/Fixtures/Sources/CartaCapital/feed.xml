@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>CartaCapital</title>
+    <item>
+      <title>Bibliotecas ampliam horário em São Paulo</title>
+      <link>https://www.cartacapital.com.br/sociedade/bibliotecas-ampliam-horario-em-sao-paulo/</link>
+      <dc:creator>CartaCapital</dc:creator>
+      <pubDate>Tue, 29 Sep 2026 18:00:00 +0000</pubDate>
+      <content:encoded><![CDATA[<p>Texto que não deve ser armazenado.</p>]]></content:encoded>
+    </item>
+    <item>
+      <title>Artigo de agência parceira</title>
+      <link>https://www.cartacapital.com.br/mundo/artigo-de-agencia-parceira/</link>
+      <dc:creator>AFP</dc:creator>
+      <pubDate>Tue, 29 Sep 2026 18:00:00 +0000</pubDate>
+    </item>
+  </channel>
+</rss>

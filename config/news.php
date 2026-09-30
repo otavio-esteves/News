@@ -5,6 +5,8 @@ use App\News\Sources\AgenciaCamaraAdapter;
 use App\News\Sources\AgenciaCnjAdapter;
 use App\News\Sources\AgenciaIbgeAdapter;
 use App\News\Sources\AgenciaSenadoAdapter;
+use App\News\Sources\CartaCapitalAdapter;
+use App\News\Sources\EstadaoAdapter;
 use App\News\Sources\FolhaAdapter;
 use App\News\Sources\G1Adapter;
 use App\News\Sources\MeioAdapter;
@@ -24,5 +26,7 @@ return [
         'folha' => FolhaAdapter::class,
         'g1' => G1Adapter::class,
         'meio' => MeioAdapter::class,
+        'estadao' => EstadaoAdapter::class,
+        'cartacapital' => CartaCapitalAdapter::class,
     ],
 ];

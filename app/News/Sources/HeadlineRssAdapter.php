@@ -67,6 +67,10 @@ abstract class HeadlineRssAdapter implements SourceAdapter
                 break;
             }
 
+            if (! $this->acceptsItem($item)) {
+                continue;
+            }
+
             $url = $this->canonicalUrl(trim((string) $item->link));
             $title = trim(strip_tags((string) $item->title));
             $date = trim((string) $item->pubDate);
@@ -93,6 +97,11 @@ abstract class HeadlineRssAdapter implements SourceAdapter
             ?: trim((string) $item->author);
 
         return $author !== '' && mb_strlen($author) <= 255 ? $author : null;
+    }
+
+    protected function acceptsItem(SimpleXMLElement $item): bool
+    {
+        return true;
     }
 
     abstract protected function canonicalUrl(string $rssUrl): ?string;

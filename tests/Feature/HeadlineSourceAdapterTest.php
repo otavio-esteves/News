@@ -6,9 +6,13 @@ use App\Models\Source;
 use App\Models\Story;
 use App\News\Contracts\SourceAdapter;
 use App\News\Discovery\PublicDnsResolver;
+use App\News\Sources\CartaCapitalAdapter;
+use App\News\Sources\EstadaoAdapter;
 use App\News\Sources\FolhaAdapter;
 use App\News\Sources\G1Adapter;
 use App\News\Sources\MeioAdapter;
+use Database\Seeders\CartaCapitalSourceSeeder;
+use Database\Seeders\EstadaoSourceSeeder;
 use Database\Seeders\FolhaSourceSeeder;
 use Database\Seeders\G1SourceSeeder;
 use Database\Seeders\MeioSourceSeeder;
@@ -31,6 +35,7 @@ dataset('headline feeds', [
     'Folha' => [FolhaSourceSeeder::class, FolhaAdapter::class, 'folha', 'Folha', 'https://www1.folha.uol.com.br/cotidiano/2026/09/bibliotecas-ampliam-horario-em-sao-paulo.shtml'],
     'G1' => [G1SourceSeeder::class, G1Adapter::class, 'g1', 'G1', 'https://g1.globo.com/sp/sao-paulo/noticia/2026/09/29/bibliotecas-ampliam-horario-em-sao-paulo.ghtml'],
     'Meio' => [MeioSourceSeeder::class, MeioAdapter::class, 'meio', 'Meio', 'https://www.canalmeio.com.br/2026/09/29/o-futuro-das-bibliotecas-brasileiras'],
+    'Estadão' => [EstadaoSourceSeeder::class, EstadaoAdapter::class, 'estadao', 'Estadao', 'https://www.estadao.com.br/brasil/bibliotecas-ampliam-horario-em-sao-paulo'],
 ]);
 
 it('imports only own article headlines with direct links and no article text', function (string $seeder, string $adapter, string $slug, string $fixture, string $expectedUrl) {
@@ -65,6 +70,26 @@ it('imports only own article headlines with direct links and no article text', f
         ->assertSee($expectedUrl);
     Http::assertSentCount(2);
 })->with('headline feeds');
+
+it('keeps CartaCapital disabled until permission and filters partner articles', function () {
+    $this->seed(CartaCapitalSourceSeeder::class);
+    $source = Source::where('slug', 'cartacapital')->firstOrFail();
+    expect($source->enabled)->toBeFalse();
+
+    Http::fake([$source->feed_url => Http::response(
+        file_get_contents(base_path('tests/Fixtures/Sources/CartaCapital/feed.xml')),
+        200,
+        ['Content-Type' => 'application/rss+xml; charset=utf-8'],
+    )]);
+
+    app(CartaCapitalAdapter::class)->discover($source);
+
+    expect(Article::count())->toBe(1)
+        ->and(Article::sole()->canonical_url)->toBe('https://www.cartacapital.com.br/sociedade/bibliotecas-ampliam-horario-em-sao-paulo')
+        ->and(Article::sole()->content)->toBeNull();
+
+    $this->get(route('stories.source', 'cartacapital'))->assertNotFound();
+});
 
 it('rejects a different feed URL before making a request', function (string $seeder, string $adapter, string $slug) {
     $this->seed($seeder);
