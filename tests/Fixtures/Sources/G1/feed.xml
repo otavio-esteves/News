@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>G1</title>
+    <item>
+      <title>Bibliotecas ampliam horário em São Paulo</title>
+      <link>https://g1.globo.com/sp/sao-paulo/noticia/2026/09/29/bibliotecas-ampliam-horario-em-sao-paulo.ghtml</link>
+      <category>G1</category>
+      <pubDate>Tue, 29 Sep 2026 16:00:00 -0000</pubDate>
+      <description>Texto do veículo que não deve ser armazenado.</description>
+    </item>
+    <item>
+      <title>Debate ao vivo</title>
+      <link>https://g1.globo.com/sp/sao-paulo/eleicoes/2026/ao-vivo/debate.ghtml</link>
+      <pubDate>Tue, 29 Sep 2026 16:00:00 -0000</pubDate>
+    </item>
+  </channel>
+</rss>

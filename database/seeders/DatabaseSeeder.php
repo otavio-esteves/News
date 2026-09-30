@@ -17,5 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call(AgenciaIbgeSourceSeeder::class);
         $this->call(AgenciaSenadoSourceSeeder::class);
         $this->call(RadioagenciaNacionalSourceSeeder::class);
+        $this->call(FolhaSourceSeeder::class);
+        $this->call(G1SourceSeeder::class);
+        $this->call(MeioSourceSeeder::class);
     }
 }

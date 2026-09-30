@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     $sources = Source::whereIn('slug', array_keys(config('news.source_adapters', [])))
         ->where('enabled', true)->orderBy('name')->get();
-    $articles = Article::with('source')->whereIn('status', [ArticleStatus::Processed, ArticleStatus::Matched])
+    $articles = Article::with('source')->whereIn('status', [ArticleStatus::Processed, ArticleStatus::Matched, ArticleStatus::Headline])
         ->whereIn('source_id', $sources->modelKeys())
         ->orderByDesc('published_at')->limit(30)->get();
 
@@ -39,7 +39,7 @@ Route::get('/fontes/{source:slug}', function (Source $source) {
         'stories' => Story::published()->fromRealSources()->with('articles.source')
             ->whereHas('articles', fn ($article) => $article->where('source_id', $source->id))
             ->orderByDesc('published_at')->orderByDesc('id')->paginate(20)->through(StoryPresenter::make(...)),
-        'articles' => Article::with('source')->whereIn('status', [ArticleStatus::Processed, ArticleStatus::Matched])
+        'articles' => Article::with('source')->whereIn('status', [ArticleStatus::Processed, ArticleStatus::Matched, ArticleStatus::Headline])
             ->where('source_id', $source->id)->orderByDesc('published_at')->limit(30)->get(),
         'activeCategory' => null,
         'activeSource' => $source->slug,
@@ -55,7 +55,7 @@ Route::get('/{category}', function (string $category) {
         'stories' => Story::published()->fromRealSources()->with('articles.source')
             ->where('category', $category)->orderByDesc('published_at')
             ->orderByDesc('id')->paginate(20)->through(StoryPresenter::make(...)),
-        'articles' => Article::with('source')->whereIn('status', [ArticleStatus::Processed, ArticleStatus::Matched])
+        'articles' => Article::with('source')->whereIn('status', [ArticleStatus::Processed, ArticleStatus::Matched, ArticleStatus::Headline])
             ->whereIn('source_id', $sources->modelKeys())
             ->where('category', $category)->orderByDesc('published_at')->limit(30)->get(),
         'activeCategory' => $category,

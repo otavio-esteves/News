@@ -73,4 +73,35 @@ final class ArticleIngestor
             return $article->refresh();
         });
     }
+
+    public function storeHeadline(
+        Source $source,
+        string $url,
+        string $title,
+        Carbon $publishedAt,
+        ?string $author = null,
+    ): Article {
+        return DB::transaction(function () use ($source, $url, $title, $publishedAt, $author): Article {
+            Source::whereIn('slug', array_keys(config('news.source_adapters', [])))
+                ->orderBy('id')->lockForUpdate()->get();
+            Source::whereKey($source->id)->lockForUpdate()->firstOrFail();
+
+            return Article::firstOrCreate(
+                ['canonical_url' => $url],
+                [
+                    'source_id' => $source->id,
+                    'original_url' => $url,
+                    'title' => $title,
+                    'author' => $author,
+                    'category' => $this->categories->classify($source->slug, $url),
+                    'published_at' => $publishedAt,
+                    'discovered_at' => now(),
+                    'fetched_at' => now(),
+                    'content' => null,
+                    'content_hash' => null,
+                    'status' => ArticleStatus::Headline,
+                ],
+            );
+        });
+    }
 }

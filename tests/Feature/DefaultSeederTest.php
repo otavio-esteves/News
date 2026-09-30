@@ -9,6 +9,6 @@ it('seeds only the real sources in every environment and remains idempotent', fu
     $this->seed();
     $this->seed();
 
-    expect(Source::count())->toBe(6)
-        ->and(Source::pluck('slug')->all())->toEqualCanonicalizing(['agencia-brasil', 'agencia-camara', 'agencia-cnj', 'agencia-ibge', 'agencia-senado', 'radioagencia-nacional']);
+    expect(Source::count())->toBe(9)
+        ->and(Source::pluck('slug')->all())->toEqualCanonicalizing(['agencia-brasil', 'agencia-camara', 'agencia-cnj', 'agencia-ibge', 'agencia-senado', 'radioagencia-nacional', 'folha', 'g1', 'meio']);
 });

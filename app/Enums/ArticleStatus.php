@@ -7,6 +7,7 @@ enum ArticleStatus: string
     case Discovered = 'discovered';
     case Fetching = 'fetching';
     case Processed = 'processed';
+    case Headline = 'headline';
     case Matched = 'matched';
     case FetchFailed = 'fetch_failed';
     case ProcessingFailed = 'processing_failed';

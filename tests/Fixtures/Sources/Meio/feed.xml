@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Meio</title>
+    <item>
+      <title>O futuro das bibliotecas brasileiras</title>
+      <link>https://www.canalmeio.com.br/2026/09/29/o-futuro-das-bibliotecas-brasileiras/</link>
+      <dc:creator>Equipe Meio</dc:creator>
+      <pubDate>Tue, 29 Sep 2026 18:00:00 +0000</pubDate>
+      <content:encoded><![CDATA[<p>Texto do veículo que não deve ser armazenado.</p>]]></content:encoded>
+    </item>
+    <item>
+      <title>Edição da newsletter com links de terceiros</title>
+      <link>https://www.canalmeio.com.br/edicoes/2026/09/29/edicao-com-links/</link>
+      <pubDate>Tue, 29 Sep 2026 18:00:00 +0000</pubDate>
+    </item>
+  </channel>
+</rss>
