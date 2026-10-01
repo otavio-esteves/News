@@ -14,7 +14,9 @@ use App\News\Sources\RadioagenciaNacionalAdapter;
 
 return [
     'ai' => [
-        'story_writer_model' => env('NEWS_AI_STORY_WRITER_MODEL', 'gpt-4o-mini'),
+        'story_writer_provider' => env('NEWS_AI_STORY_WRITER_PROVIDER', 'ollama'),
+        'story_writer_model' => env('NEWS_AI_STORY_WRITER_MODEL', 'qwen3:4b'),
+        'auto_queue' => env('NEWS_AI_AUTO_QUEUE', false),
     ],
     'source_adapters' => [
         'agencia-brasil' => AgenciaBrasilAdapter::class,

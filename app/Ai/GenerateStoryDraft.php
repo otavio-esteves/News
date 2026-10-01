@@ -38,17 +38,27 @@ final class GenerateStoryDraft
             }
         }
 
-        if (blank(config('ai.providers.openai.key'))) {
+        $provider = config('news.ai.story_writer_provider');
+        $model = config('news.ai.story_writer_model');
+
+        if (! in_array($provider, ['ollama', 'openai'], true) || blank($model)) {
+            throw new DomainException('Configure um provedor e modelo de IA suportados.');
+        }
+
+        if ($provider === 'openai' && blank(config('ai.providers.openai.key'))) {
             throw new DomainException('Configure OPENAI_API_KEY antes de gerar um rascunho.');
         }
 
-        $model = config('news.ai.story_writer_model');
+        if ($provider === 'ollama' && blank(config('ai.providers.ollama.url'))) {
+            throw new DomainException('Configure OLLAMA_URL antes de gerar um rascunho.');
+        }
+
+        $contentLimit = $provider === 'ollama' ? 2500 : 8000;
         $context = $articles->map(fn ($article): array => [
             'id' => $article->id,
-            'source' => $article->source->name,
             'title' => $article->title,
             'published_at' => $article->published_at?->toIso8601String(),
-            'content' => Str::limit($article->content, 8000, ''),
+            'content' => Str::limit($article->content, $contentLimit, ''),
         ])->all();
         $prompt = json_encode([
             'category' => $story->category->value,
@@ -58,9 +68,9 @@ final class GenerateStoryDraft
         $run = AiRun::create([
             'type' => 'story_writer',
             'story_id' => $story->id,
-            'provider' => 'openai',
+            'provider' => $provider,
             'model' => $model,
-            'prompt_version' => 'v1',
+            'prompt_version' => 'v4',
             'schema_version' => 'v1',
             'input_hash' => hash('sha256', $prompt),
             'status' => 'running',
@@ -68,13 +78,13 @@ final class GenerateStoryDraft
         ]);
 
         try {
-            $response = StoryWriter::make()->prompt($prompt, provider: 'openai', model: $model);
+            $response = StoryWriter::make()->prompt($prompt, provider: $provider, model: $model, timeout: $provider === 'ollama' ? 240 : 60);
 
             if (! $response instanceof StructuredAgentResponse) {
                 throw new DomainException('O modelo não retornou uma resposta estruturada.');
             }
 
-            $validated = $this->validator->validate($story, $response->toArray(), $articles->modelKeys());
+            $validated = $this->validator->validate($story, $response->toArray(), $articles);
 
             return DB::transaction(function () use ($story, $run, $response, $validated): StoryDraft {
                 $lockedStory = Story::whereKey($story->id)->lockForUpdate()->firstOrFail();

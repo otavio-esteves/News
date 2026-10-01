@@ -73,6 +73,15 @@ A ingestão normaliza URLs HTTPS, remove parâmetros de rastreamento e usa o cam
 
 `make test` usa SQLite em memória e não altera o PostgreSQL de desenvolvimento.
 
-O primeiro recorte do M8 permite gerar manualmente uma síntese para uma Story em rascunho que ainda não tenha síntese. Configure `OPENAI_API_KEY` no `.env` e, se necessário, `NEWS_AI_STORY_WRITER_MODEL`; passe o ID da Story para `news:write-draft`. O comando aceita de um a dez Articles de fontes reais habilitadas, valida título, categoria, parágrafos e referências, registra a tentativa em `ai_runs` e salva a saída em `story_drafts`. A síntese não aparece no site público. As falhas de validação não criam rascunhos, e um rascunho existente não é sobrescrito.
+O M8 gera sínteses em `story_drafts` com revisão editorial obrigatória. Por padrão, usa o [Qwen3 4B quantizado](https://ollama.com/library/qwen3%3A4b) local via Ollama e o Laravel AI SDK. O Qwen3 1.7B foi testado, mas repetiu trechos extensos dos artigos; o 4B preservou melhor as entidades no teste local. Suba o serviço e baixe o modelo uma vez:
+
+```bash
+docker compose up -d ollama ai-worker
+docker compose exec ollama ollama pull qwen3:4b
+```
+
+Para gerar uma Story em fila, use `docker compose exec app php artisan news:write-draft ID --queue`. Para enfileirar Stories elegíveis em lote, use `docker compose exec app php artisan news:queue-drafts --limit=5`. Depois de confirmar que o modelo está instalado, defina `NEWS_AI_AUTO_QUEUE=true` no `.env` e reinicie o scheduler; ele enfileirará no máximo uma Story a cada cinco minutos. O worker `ai-worker` processa uma síntese por vez, separado da fila de coleta. O comando `news:write-draft ID` continua disponível para execução síncrona.
+
+O fluxo aceita de um a dez Articles com texto e fonte real habilitada, valida título, categoria, parágrafos, referências, IDs internos no texto e cópia extensa, registra cada tentativa em `ai_runs` e nunca publica automaticamente. O modelo local recebe até 2.500 caracteres por artigo para limitar o contexto. Falhas de validação não criam rascunho; uma nova tentativa manual pode ser enfileirada com `--queue`. Para usar OpenAI, configure `NEWS_AI_STORY_WRITER_PROVIDER=openai`, `NEWS_AI_STORY_WRITER_MODEL=gpt-4o-mini` e `OPENAI_API_KEY`.
 
 A revisão editorial e a publicação das Stories entram nos marcos seguintes.

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Ai\GenerateStoryDraft;
+use App\Jobs\GenerateStoryDraftJob;
 use App\Models\Story;
 use DomainException;
 use Illuminate\Console\Command;
@@ -11,13 +12,20 @@ use Throwable;
 
 class WriteStoryDraft extends Command
 {
-    protected $signature = 'news:write-draft {story : Story ID}';
+    protected $signature = 'news:write-draft {story : Story ID} {--queue : Generate in the dedicated AI queue}';
 
     protected $description = 'Generate an unpublished, validated AI draft for one Story';
 
     public function handle(GenerateStoryDraft $writer): int
     {
         $story = Story::findOrFail($this->argument('story'));
+
+        if ($this->option('queue')) {
+            GenerateStoryDraftJob::dispatch($story->id);
+            $this->components->info("Story {$story->id} enfileirada para geração do rascunho.");
+
+            return self::SUCCESS;
+        }
 
         try {
             $draft = $writer->handle($story);
