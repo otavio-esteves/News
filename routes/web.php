@@ -2,11 +2,25 @@
 
 use App\Enums\ArticleStatus;
 use App\Enums\StoryCategory;
+use App\Http\Controllers\AdminSessionController;
+use App\Http\Controllers\AdminStoryController;
 use App\Models\Article;
 use App\Models\Source;
 use App\Models\Story;
 use App\Support\StoryPresenter;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/admin/login', [AdminSessionController::class, 'create'])->name('login');
+Route::post('/admin/login', [AdminSessionController::class, 'store'])->middleware('throttle:5,1')->name('admin.login');
+
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:review-stories'])->group(function (): void {
+    Route::redirect('/', '/admin/stories');
+    Route::post('/logout', [AdminSessionController::class, 'destroy'])->name('logout');
+    Route::get('/stories', [AdminStoryController::class, 'index'])->name('stories.index');
+    Route::get('/stories/{draft}', [AdminStoryController::class, 'show'])->name('stories.show');
+    Route::post('/stories/{draft}/approve', [AdminStoryController::class, 'approve'])->name('stories.approve');
+    Route::post('/stories/{draft}/reject', [AdminStoryController::class, 'reject'])->name('stories.reject');
+});
 
 Route::get('/', function () {
     $sources = Source::whereIn('slug', array_keys(config('news.source_adapters', [])))

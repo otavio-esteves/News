@@ -84,4 +84,10 @@ Para gerar uma Story em fila, use `docker compose exec app php artisan news:writ
 
 O fluxo aceita de um a dez Articles com texto e fonte real habilitada, valida título, categoria, parágrafos, referências, IDs internos no texto e cópia extensa, registra cada tentativa em `ai_runs` e nunca publica automaticamente. O modelo local recebe até 2.500 caracteres por artigo para limitar o contexto. Falhas de validação não criam rascunho; uma nova tentativa manual pode ser enfileirada com `--queue`. Para usar OpenAI, configure `NEWS_AI_STORY_WRITER_PROVIDER=openai`, `NEWS_AI_STORY_WRITER_MODEL=gpt-4o-mini` e `OPENAI_API_KEY`.
 
-A revisão editorial e a publicação das Stories entram nos marcos seguintes.
+## Revisão editorial
+
+Depois de aplicar as migrações, crie uma conta de editor com `docker compose exec -T app php artisan news:create-editor editor@exemplo.com --name=Editor`. O comando gera uma senha e a mostra uma única vez. Não há cadastro público.
+
+Entre em `/admin/login` e abra a fila em `/admin/stories`. Cada resumo mostra as matérias originais e as referências por parágrafo. A aprovação revalida o rascunho, publica a Story e cria uma revisão imutável com o editor e as fontes consultadas. A rejeição exige um motivo, mantém o rascunho no histórico editorial e não publica nada. Rascunhos rejeitados deixam de entrar na fila automática; uma nova geração requer intervenção editorial.
+
+O scheduler verifica fontes elegíveis a cada cinco minutos. As fontes ativas usam intervalos de 30 ou 60 minutos entre coletas, conforme seu cadastro. O agrupamento em Stories roda a cada 30 minutos; com `NEWS_AI_AUTO_QUEUE=true`, até um resumo novo é enfileirado a cada cinco minutos.

@@ -15,7 +15,8 @@ class StoryDraft extends Model
 
     protected $fillable = [
         'story_id', 'title', 'category', 'summary_blocks', 'ai_run_id',
-        'validation_error', 'generated_at',
+        'validation_error', 'generated_at', 'review_status', 'reviewed_by',
+        'reviewed_at', 'rejection_reason',
     ];
 
     protected function casts(): array
@@ -24,6 +25,7 @@ class StoryDraft extends Model
             'category' => StoryCategory::class,
             'summary_blocks' => 'array',
             'generated_at' => 'datetime',
+            'reviewed_at' => 'datetime',
         ];
     }
 
@@ -35,5 +37,10 @@ class StoryDraft extends Model
     public function aiRun(): BelongsTo
     {
         return $this->belongsTo(AiRun::class);
+    }
+
+    public function reviewer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'reviewed_by');
     }
 }
