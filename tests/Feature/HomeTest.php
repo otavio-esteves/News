@@ -57,6 +57,72 @@ it('shows extracted real headlines and their original links on the homepage', fu
         ->assertDontSee('fictícios');
 });
 
+it('shows only the central daily summary in the news feed', function () {
+    [$story, $article] = publishedStory('resumo-aprovado', 'Título da síntese', StoryCategory::Brasil);
+    $story->update(['summary_blocks' => [
+        ['text' => 'Primeiro parágrafo aprovado.', 'article_ids' => [$article->id]],
+        ['text' => 'Segundo parágrafo aprovado.', 'article_ids' => [$article->id]],
+    ]]);
+    StoryDraft::factory()->create([
+        'story_id' => $story->id,
+        'title' => 'Título pendente',
+        'summary_blocks' => [['text' => 'Resumo pendente e privado.', 'article_ids' => [$article->id]]],
+    ]);
+
+    $this->get('/')->assertOk()
+        ->assertSee('Resumo diário')
+        ->assertSee($article->canonical_url)
+        ->assertDontSee('Primeiro parágrafo aprovado.')
+        ->assertDontSee('Segundo parágrafo aprovado.')
+        ->assertDontSee('Resumo pendente e privado.');
+});
+
+it('keeps articles without approved summaries as source headlines only', function () {
+    $source = Source::factory()->create(['slug' => 'agencia-brasil', 'enabled' => true]);
+    $article = Article::factory()->create(['source_id' => $source->id, 'status' => ArticleStatus::Processed]);
+    $story = Story::factory()->create();
+    $story->articles()->attach($article);
+    StoryDraft::factory()->create([
+        'story_id' => $story->id,
+        'summary_blocks' => [['text' => 'Rascunho não aprovado.', 'article_ids' => [$article->id]]],
+    ]);
+
+    $this->get('/')->assertOk()
+        ->assertSee($article->title)
+        ->assertSee($article->canonical_url)
+        ->assertSee('Resumo diário')
+        ->assertDontSee('Rascunho não aprovado.');
+});
+
+it('offers more source headlines after the first 30 in each news section', function () {
+    $source = Source::factory()->create(['slug' => 'agencia-brasil', 'enabled' => true]);
+
+    for ($index = 1; $index <= 31; $index++) {
+        Article::factory()->create([
+            'source_id' => $source->id,
+            'title' => "Manchete de paginação {$index}",
+            'category' => StoryCategory::Brasil,
+            'status' => ArticleStatus::Processed,
+            'published_at' => now()->subMinutes($index),
+        ]);
+    }
+
+    foreach (['/', '/brasil', route('stories.source', $source->slug)] as $url) {
+        $this->get($url)->assertOk()
+            ->assertSee('Manchete de paginação 1')
+            ->assertDontSee('Manchete de paginação 31')
+            ->assertSee('Ler mais notícias')
+            ->assertSee('articles_page=2')
+            ->assertSee('#noticias-das-fontes');
+
+        $separator = str_contains($url, '?') ? '&' : '?';
+        $this->get($url.$separator.'articles_page=2')->assertOk()
+            ->assertDontSee('Manchete de paginação 1')
+            ->assertSee('Manchete de paginação 31')
+            ->assertDontSee('Ler mais notícias');
+    }
+});
+
 it('keeps the top category bar and provides a left drawer beside the brand', function () {
     Source::factory()->create(['slug' => 'agencia-camara', 'name' => 'Agência Câmara', 'enabled' => true]);
     Source::factory()->create(['slug' => 'agencia-senado', 'name' => 'Agência Senado', 'enabled' => false]);
@@ -76,7 +142,7 @@ it('keeps the top category bar and provides a left drawer beside the brand', fun
         ->assertDontSee('Agência Senado');
 });
 
-it('filters original articles and published stories by source', function () {
+it('filters original articles by source without individual summaries', function () {
     $brasil = Source::factory()->create(['slug' => 'agencia-brasil', 'name' => 'Agência Brasil', 'enabled' => true]);
     $camara = Source::factory()->create(['slug' => 'agencia-camara', 'name' => 'Agência Câmara', 'enabled' => true]);
     $brasilArticle = Article::factory()->create(['source_id' => $brasil->id, 'title' => 'Manchete da Agência Brasil', 'status' => ArticleStatus::Processed]);
@@ -95,7 +161,7 @@ it('filters original articles and published stories by source', function () {
     $this->get(route('stories.source', 'agencia-brasil'))
         ->assertOk()
         ->assertSee('Manchete da Agência Brasil')
-        ->assertSee('Síntese da Agência Brasil')
+        ->assertDontSee('Síntese da Agência Brasil')
         ->assertDontSee('Manchete da Agência Câmara')
         ->assertSee('aria-current="page"', false);
 
@@ -125,7 +191,7 @@ it('uses https for built assets when a trusted proxy forwards the original schem
     expect(parse_url($matches[1], PHP_URL_SCHEME))->toBe('https');
 });
 
-it('filters original articles and published stories by editorial category', function () {
+it('filters original articles by editorial category', function () {
     $brasil = Source::factory()->create(['slug' => 'agencia-brasil', 'name' => 'Agência Brasil', 'enabled' => true]);
     $senado = Source::factory()->create(['slug' => 'agencia-senado', 'name' => 'Agência Senado', 'enabled' => true]);
     Article::factory()->create(['source_id' => $brasil->id, 'title' => 'Manchete sobre cultura', 'category' => StoryCategory::Cultura, 'status' => ArticleStatus::Processed]);
@@ -151,49 +217,14 @@ it('filters original articles and published stories by editorial category', func
         ->assertSee('Manchete sobre política');
 });
 
-it('filters published stories by category', function () {
+it('keeps individual story summaries out of category feeds', function () {
     publishedStory('historia-economia', 'Economia em destaque', StoryCategory::Economia);
     publishedStory('historia-brasil', 'Brasil em destaque', StoryCategory::Brasil);
 
     $this->get('/economia')
         ->assertOk()
-        ->assertSee('Economia em destaque')
+        ->assertDontSee('Economia em destaque')
         ->assertDontSee('Brasil em destaque');
-});
-
-it('paginates published stories while keeping category filters', function () {
-    $source = Source::factory()->create(['slug' => 'agencia-brasil', 'enabled' => true]);
-    $article = Article::factory()->create(['source_id' => $source->id]);
-    $editor = User::factory()->create();
-
-    for ($index = 1; $index <= 21; $index++) {
-        $story = Story::factory()->published()->create([
-            'slug' => "historia-{$index}",
-            'title' => "História {$index}",
-            'category' => StoryCategory::Brasil,
-            'published_at' => now()->subMinutes($index),
-        ]);
-        $story->articles()->attach($article->id);
-        StoryRevision::factory()->create([
-            'story_id' => $story->id,
-            'title' => $story->title,
-            'category' => $story->category,
-            'summary_blocks' => $story->summary_blocks,
-            'published_by' => $editor->id,
-            'published_at' => $story->published_at,
-        ]);
-    }
-
-    $this->get('/brasil')
-        ->assertOk()
-        ->assertSee('História 1')
-        ->assertDontSee('História 21')
-        ->assertSee('page=2');
-
-    $this->get('/brasil?page=2')
-        ->assertOk()
-        ->assertSee('História 21')
-        ->assertDontSee('História 1');
 });
 
 it('shows an empty category state', function () {
@@ -219,9 +250,10 @@ it('does not expose a draft or replace a published version with its pending draf
     Story::factory()->create();
     StoryDraft::factory()->create(['story_id' => $story->id, 'title' => 'Título ainda não aprovado']);
 
+    $this->get('/n/'.$story->slug)->assertOk()->assertSee('Título aprovado');
     $this->get('/')
         ->assertOk()
-        ->assertSee('Título aprovado')
+        ->assertDontSee('Título aprovado')
         ->assertDontSee('Título ainda não aprovado');
 });
 

@@ -16,7 +16,8 @@ return [
     'ai' => [
         'story_writer_provider' => env('NEWS_AI_STORY_WRITER_PROVIDER', 'ollama'),
         'story_writer_model' => env('NEWS_AI_STORY_WRITER_MODEL', 'qwen3:4b'),
-        'auto_queue' => env('NEWS_AI_AUTO_QUEUE', false),
+        'daily_summary_model' => env('NEWS_AI_DAILY_MODEL', 'qwen3.5:2b'),
+        'story_summaries_enabled' => false,
     ],
     'source_adapters' => [
         'agencia-brasil' => AgenciaBrasilAdapter::class,

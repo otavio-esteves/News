@@ -2104,3 +2104,12 @@ A prioridade é criar um sistema:
 - fácil para o Codex compreender;
 - com poucas dependências;
 - capaz de crescer sem reescrita.
+# Atualização — resumo diário centralizado
+
+O feed público mostra um resumo diário aprovado, acima dos títulos das matérias
+originais. A geração automática de resumos individuais de Stories e o agrupamento
+agendado ficam pausados. A cada duas horas, no horário de São Paulo, a IA resume
+até oito matérias novas e o sistema acrescenta os novos parágrafos ao acumulado
+do dia, preservando todos os parágrafos anteriores. A execução da meia-noite
+encerra o dia anterior. Cada atualização precisa de aprovação editorial antes
+de substituir a versão pública; revisões publicadas permanecem imutáveis.

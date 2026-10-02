@@ -16,6 +16,12 @@ class QueueStoryDrafts extends Command
 
     public function handle(): int
     {
+        if (! config('news.ai.story_summaries_enabled')) {
+            $this->components->info('A geração individual está pausada; use o resumo diário.');
+
+            return self::SUCCESS;
+        }
+
         $limit = filter_var($this->option('limit'), FILTER_VALIDATE_INT);
 
         if ($limit === false || $limit < 1 || $limit > 20) {

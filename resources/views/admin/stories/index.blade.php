@@ -11,6 +11,7 @@
         @if (session('status')) <p role="status" class="mt-7 rounded-lg border border-border bg-card p-4 text-sm">{{ session('status') }}</p> @endif
 
         <nav aria-label="Estado dos resumos" class="mt-8 flex gap-4 border-b border-border pb-4 text-sm font-semibold">
+            <a href="{{ route('admin.daily-summaries.index') }}" class="underline-offset-4 hover:underline">Resumo diário</a>
             <a href="{{ route('admin.stories.index') }}" @if($status === 'pending') aria-current="page" @endif class="underline-offset-4 hover:underline">Pendentes</a>
             <a href="{{ route('admin.stories.index', ['status' => 'rejected']) }}" @if($status === 'rejected') aria-current="page" @endif class="underline-offset-4 hover:underline">Rejeitados</a>
         </nav>

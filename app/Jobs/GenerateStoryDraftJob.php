@@ -41,6 +41,10 @@ class GenerateStoryDraftJob implements ShouldBeUnique, ShouldQueue
 
     public function handle(GenerateStoryDraft $writer): void
     {
+        if (! config('news.ai.story_summaries_enabled')) {
+            return;
+        }
+
         $story = Story::find($this->storyId);
 
         if ($story === null || $story->draft()->exists()) {

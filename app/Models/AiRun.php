@@ -13,7 +13,7 @@ class AiRun extends Model
     use HasFactory;
 
     protected $fillable = [
-        'type', 'story_id', 'article_id', 'provider', 'model',
+        'type', 'story_id', 'article_id', 'daily_summary_id', 'provider', 'model',
         'prompt_version', 'schema_version', 'input_hash', 'status',
         'input_tokens', 'output_tokens', 'cost', 'cost_currency',
         'error', 'started_at', 'finished_at',

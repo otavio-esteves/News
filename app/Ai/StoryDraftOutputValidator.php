@@ -85,7 +85,7 @@ final class StoryDraftOutputValidator
         ];
     }
 
-    private function copiesLongPassage(string $text, string $source): bool
+    public function copiesLongPassage(string $text, string $source): bool
     {
         $normalize = static fn (string $value): array => array_values(array_filter(explode(' ', trim(preg_replace('/[^\p{L}\p{N}]+/u', ' ', mb_strtolower($value)) ?? ''))));
         $words = $normalize($text);

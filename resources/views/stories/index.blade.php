@@ -13,18 +13,16 @@
             <p class="mx-auto mt-4 max-w-[470px] text-sm leading-6 text-muted-foreground sm:text-base">O que você precisa saber, direto de fontes identificadas.</p>
         </div>
 
-        @if (count($stories) > 0)
-            <section aria-label="Sínteses publicadas" class="mb-12 space-y-4">
-                <h2 class="px-1 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">Sínteses publicadas</h2>
-                @foreach ($stories as $story)
-                    <x-story :story="$story" />
-                @endforeach
-                {{ $stories->links() }}
+        @if ($dailySummary)
+            <x-daily-summary :daily="$dailySummary" />
+        @elseif (! $activeCategory && ! $activeSource)
+            <section aria-label="Resumo diário" class="mb-12">
+                <h2 class="px-1 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">Resumo diário</h2>
+                <p class="mt-4 rounded-xl border border-border bg-card p-5 text-sm text-muted-foreground">O resumo de hoje aparecerá aqui após a revisão editorial.</p>
             </section>
         @endif
 
-        @if (count($articles) > 0 || count($stories) === 0)
-            <section aria-label="Notícias das fontes" class="space-y-4">
+        <section id="noticias-das-fontes" aria-label="Notícias das fontes" class="scroll-mt-6 space-y-4">
                 <div class="flex items-center justify-between gap-4 px-1 pb-1">
                     <h2 class="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">Direto das fontes</h2>
                     <span class="text-xs text-muted-foreground">{{ count($articles) }} {{ count($articles) === 1 ? 'notícia' : 'notícias' }}</span>
@@ -40,7 +38,11 @@
                         @endif
                     </x-ui.card>
                 @endforelse
-            </section>
-        @endif
+                @if ($articles->hasMorePages())
+                    <div class="pt-4 text-center">
+                        <a href="{{ $articles->appends(request()->except('articles_page'))->nextPageUrl() }}#noticias-das-fontes" class="inline-flex min-h-11 items-center justify-center rounded-lg border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:border-foreground/40 hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">Ler mais notícias ↓</a>
+                    </div>
+                @endif
+        </section>
     </main>
 </x-layouts.app>

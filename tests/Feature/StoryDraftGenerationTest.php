@@ -206,6 +206,7 @@ it('generates through the local provider without an OpenAI key', function () {
 });
 
 it('queues only eligible unpublished Stories on the dedicated AI queue', function () {
+    config()->set('news.ai.story_summaries_enabled', true);
     [$eligible] = draftStoryWithArticle();
     [$alreadyDrafted] = draftStoryWithArticle();
     StoryDraft::factory()->create(['story_id' => $alreadyDrafted->id]);

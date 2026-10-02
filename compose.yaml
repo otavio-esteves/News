@@ -37,8 +37,8 @@ services:
 
   ai-worker:
     <<: *php
-    command: php artisan queue:work --queue=ai --sleep=2 --tries=2 --timeout=300 --max-time=3600
-    stop_grace_period: 330s
+    command: php artisan queue:work --queue=ai --sleep=2 --tries=2 --timeout=420 --max-time=3600
+    stop_grace_period: 450s
     restart: unless-stopped
     depends_on:
       postgres:
@@ -92,6 +92,8 @@ services:
       - .:/app
     env_file:
       - .env
+    environment:
+      NPM_CONFIG_CACHE: /tmp/npm-cache
     ports:
       - "${VITE_PORT:-5174}:${VITE_PORT:-5174}"
     command: npm run dev -- --host 0.0.0.0
